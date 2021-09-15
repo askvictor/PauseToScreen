@@ -14,6 +14,7 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using Microsoft.Toolkit.Uwp.Notifications;
 
+
 // https://stackoverflow.com/questions/362986/capture-the-screen-into-a-bitmap
 
 // https://stackoverflow.com/questions/69083184/change-between-duplicate-mirror-and-extend-display-modes-in-c
@@ -32,21 +33,28 @@ namespace PauseToScreen
             Application.SetCompatibleTextRenderingDefault(false);
             
             GlobalHotKey.RegisterHotKey("Ctrl + Shift + P", () => HandleHotKey());
-            
+            var hotplug = new DisplayHotplugDetect(HidePauseForm);
             var notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             notifyIcon.ContextMenuStrip.Items.Add("Pause/Unpause", null, (object Sender, EventArgs e) => HandleHotKey());
-            notifyIcon.ContextMenuStrip.Items.Add("Exit", null, menuItem1_Click);
+            notifyIcon.ContextMenuStrip.Items.Add("Exit", null,(object Sender, EventArgs e) => Application.Exit());
             notifyIcon.Icon = SystemIcons.Application;
             notifyIcon.Text = "Pause To Screen";
             notifyIcon.Visible = true;
-            static void menuItem1_Click(object Sender, EventArgs e) {
-                Application.Exit();
-            }
             
             Application.Run(new ApplicationContext()); 
         }
 
+        public static void HandleMonitorHotplug()
+        {
+            switch (GetMonitorTopology())
+            {
+                case CCDWrapper.DisplayConfigTopologyId.External: //Only one monitor
+                case CCDWrapper.DisplayConfigTopologyId.Internal:
+                    HidePauseForm();
+                    break;
+            }
+        }
         public static void HandleHotKey()
         {
             //Possible states:
@@ -71,9 +79,9 @@ namespace PauseToScreen
                     break;
             }
         }
-        public static void UnPause()
+
+        public static void HidePauseForm()
         {
-            CloneDisplays();
             if (Application.OpenForms.Count > 0)
             {
                 foreach (Form form in Application.OpenForms)
@@ -81,6 +89,11 @@ namespace PauseToScreen
                     form.Hide();
                 }
             }
+        }
+        public static void UnPause()
+        {
+            CloneDisplays();
+            HidePauseForm();
         }
         public static void Pause()
         {
