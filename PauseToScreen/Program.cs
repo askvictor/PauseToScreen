@@ -13,7 +13,21 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Microsoft.Toolkit.Uwp.Notifications;
+using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
+/* Test Cases:
+ Single monitor - activate: should create notification, and do nothing
+ 2 monitors - unplug external monitor: should close any existing 'pause' windows
+ 2 monitors, mirrored - activate: pause to external monitor (screenshot -> extend monitors -> show screenshot on secondary)
+ 2 monitors, extended - activate: unpause (close existing 'pause' windows, mirror monitors)
+ Case to test that 'pause' image appears fullscreen (this requires setting the extended mode to test case before switching to mirroring):
+    both monitors same resolution
+    internal monitor low res (e.g. 1280x720), ext monitor high res (e.g. 1920x1080)
+    internal monitor high res (e.g. 2560x1440), ext monitor low res (e.g. 1920x1080)
+    Need to check a range of display scaling options
+*/
+//TODO - autostart on login (perhaps via installer?) - shortcut to Start Menu\Programs\Startup folder is easiest
+//TODO - Intro page
 
 // https://stackoverflow.com/questions/362986/capture-the-screen-into-a-bitmap
 
@@ -36,15 +50,15 @@ namespace PauseToScreen
             var hotplug = new DisplayHotplugDetect(HidePauseForm);
             var notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
-            notifyIcon.ContextMenuStrip.Items.Add("Pause/Unpause", null, (object Sender, EventArgs e) => HandleHotKey());
-            notifyIcon.ContextMenuStrip.Items.Add("Exit", null,(object Sender, EventArgs e) => Application.Exit());
-            notifyIcon.Icon = SystemIcons.Application;
+            notifyIcon.ContextMenuStrip.Items.Add("Pause/Unpause", null, (s, e) => HandleHotKey());
+            notifyIcon.ContextMenuStrip.Items.Add("Exit", null,(s, e) => Application.Exit());
+            notifyIcon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath); 
             notifyIcon.Text = "Pause To Screen";
+            notifyIcon.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) HandleHotKey(); };
             notifyIcon.Visible = true;
-            
+
             Application.Run(new ApplicationContext()); 
         }
-
         public static void HandleMonitorHotplug()
         {
             switch (GetMonitorTopology())
@@ -74,7 +88,7 @@ namespace PauseToScreen
                 case CCDWrapper.DisplayConfigTopologyId.Internal:
                     new ToastContentBuilder().AddText("PauseToScreen only works when multiple screens are active")
                         .Show();
-                    break; // perhaps show a message/popup of some sort?
+                    break; 
                 default:  //No display? 
                     break;
             }

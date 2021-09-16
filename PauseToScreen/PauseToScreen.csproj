@@ -10,5 +10,7 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.0.2" />
     </ItemGroup>
-
+    <PropertyGroup>
+        <ApplicationIcon>PauseToScreen.ico</ApplicationIcon>
+    </PropertyGroup>
 </Project>
