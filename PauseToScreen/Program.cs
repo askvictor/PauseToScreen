@@ -1,10 +1,13 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using Microsoft.Toolkit.Uwp.Notifications;
+using System.IO;
 
 /* Test Cases:
  Single monitor - activate: should create notification, and do nothing
@@ -43,13 +46,13 @@ namespace PauseToScreen
             var notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             notifyIcon.ContextMenuStrip.Items.Add("Pause/Unpause", null, (s, e) => HandleHotKey());
-            notifyIcon.ContextMenuStrip.Items.Add("Help", null, ShowHelp);
+            notifyIcon.ContextMenuStrip.Items.Add("README", null,
+                (s, e) => Process.Start(new ProcessStartInfo{FileName="https://github.com/askvictor/PauseToScreen/blob/master/README.md", UseShellExecute=true}));
             notifyIcon.ContextMenuStrip.Items.Add("Exit", null,(s, e) => Application.Exit());
             notifyIcon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             notifyIcon.Text = "Pause To Screen";
             notifyIcon.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) HandleHotKey(); };
             notifyIcon.Visible = true;
-
             Application.Run(new ApplicationContext()); 
         }
         public static void HandleMonitorHotplug()
@@ -77,7 +80,8 @@ namespace PauseToScreen
             textBox1.Name = "textBox1";
             textBox1.Size = new System.Drawing.Size(765, 26);
             textBox1.TabIndex = 0;
-            textBox1.Text = "This is some text";
+            var f = Assembly.GetEntryAssembly().GetFile("README.md");
+            textBox1.Text = "text";
             // 
             // button1
             // 
