@@ -1,19 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Drawing.Imaging;
-using System.Runtime.CompilerServices;
-using System.Windows.Automation;
 using System.Windows.Forms;
-using System.Windows.Input;
 using Microsoft.Win32;
 using Microsoft.Toolkit.Uwp.Notifications;
-using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 /* Test Cases:
  Single monitor - activate: should create notification, and do nothing
@@ -25,6 +16,7 @@ using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
     internal monitor low res (e.g. 1280x720), ext monitor high res (e.g. 1920x1080)
     internal monitor high res (e.g. 2560x1440), ext monitor low res (e.g. 1920x1080)
     Need to check a range of display scaling options
+    Need to check a range of second screen placement options - left, right, above, below, diagonal.
 */
 //TODO - autostart on login (perhaps via installer?) - shortcut to Start Menu\Programs\Startup folder is easiest
 //TODO - Intro page
@@ -51,8 +43,9 @@ namespace PauseToScreen
             var notifyIcon = new System.Windows.Forms.NotifyIcon();
             notifyIcon.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
             notifyIcon.ContextMenuStrip.Items.Add("Pause/Unpause", null, (s, e) => HandleHotKey());
+            notifyIcon.ContextMenuStrip.Items.Add("Help", null, ShowHelp);
             notifyIcon.ContextMenuStrip.Items.Add("Exit", null,(s, e) => Application.Exit());
-            notifyIcon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath); 
+            notifyIcon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             notifyIcon.Text = "Pause To Screen";
             notifyIcon.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) HandleHotKey(); };
             notifyIcon.Visible = true;
@@ -69,6 +62,52 @@ namespace PauseToScreen
                     break;
             }
         }
+
+        public static void ShowHelp(object s, EventArgs e)
+        {
+            Form HelpForm = new Form();
+            TextBox textBox1 = new System.Windows.Forms.TextBox();
+            Button button1 = new System.Windows.Forms.Button();
+            Button button2 = new System.Windows.Forms.Button();
+            HelpForm.SuspendLayout();
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new System.Drawing.Point(15, 15);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new System.Drawing.Size(765, 26);
+            textBox1.TabIndex = 0;
+            textBox1.Text = "This is some text";
+            // 
+            // button1
+            // 
+            button1.Location = new System.Drawing.Point(113, 378);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(163, 60);
+            button1.TabIndex = 1;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            button2.Location = new System.Drawing.Point(551, 378);
+            button2.Name = "button2";
+            button2.Size = new System.Drawing.Size(161, 60);
+            button2.TabIndex = 2;
+            button2.Text = "button2";
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // Form1
+            // 
+            HelpForm.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            HelpForm.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            HelpForm.ClientSize = new System.Drawing.Size(800, 576);
+            HelpForm.Controls.Add(button2);
+            HelpForm.Controls.Add(button1);
+            HelpForm.Controls.Add(textBox1);
+            HelpForm.Name = "Form1";
+        }
+
         public static void HandleHotKey()
         {
             //Possible states:
@@ -129,31 +168,6 @@ namespace PauseToScreen
             // Switch to extended mode
             ExtendDisplays();
 
-            //EnableSecondaryDisplay();
-            // // from http://www.pinvoke.net/default.aspx/user32/EnumDisplayDevices.html
-            // DISPLAY_DEVICE d=new DISPLAY_DEVICE();
-            // d.cb=Marshal.SizeOf(d);
-            // try {
-            //     for (int id=0; EnumDisplayDevices(null, id, ref d, 0); id++) {
-            //         //if (!d.StateFlags.HasFlag(DisplayDeviceStateFlags.AttachedToDesktop))
-            //         //{
-            //             Console.WriteLine(d.DeviceName);
-            //             //https://stackoverflow.com/questions/233411/how-do-i-enable-a-second-monitor-in-c
-            //             DEVMODE devm = new DEVMODE();
-            //             EnumDisplaySettingsEx(d.DeviceName, ENUM_CURRENT_SETTINGS, ref devm, 0);
-            //             Console.WriteLine(devm.dmPositionX);
-            //             Console.WriteLine(devm.dmPositionY);
-            //             devm.dmPositionX = -2560;
-            //             devm.dmPositionY = 0;
-            //             devm.dmFields = 32; //DM.Position;
-            //             //ChangeDisplaySettingsEx(d.DeviceName, ref devm, IntPtr.Zero, ChangeDisplaySettingsFlags.CDS_UPDATEREGISTRY, IntPtr.Zero);
-            //
-            //         //}
-            //         d.cb=Marshal.SizeOf(d);
-            //     }
-            // } catch (Exception ex) {
-            //     Console.WriteLine(String.Format("{0}",ex.ToString()));
-            // }
             Form f = null;
             if (Application.OpenForms.Count > 0)
             {

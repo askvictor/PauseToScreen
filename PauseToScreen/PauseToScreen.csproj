@@ -10,6 +10,9 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.0.2" />
     </ItemGroup>
+    <ItemGroup>
+        <None Include="README.md" pack="true" PackagePath="." />
+    </ItemGroup>
     <PropertyGroup>
         <ApplicationIcon>PauseToScreen.ico</ApplicationIcon>
     </PropertyGroup>
