@@ -66,52 +66,6 @@ namespace PauseToScreen
             }
         }
 
-        public static void ShowHelp(object s, EventArgs e)
-        {
-            Form HelpForm = new Form();
-            TextBox textBox1 = new System.Windows.Forms.TextBox();
-            Button button1 = new System.Windows.Forms.Button();
-            Button button2 = new System.Windows.Forms.Button();
-            HelpForm.SuspendLayout();
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new System.Drawing.Point(15, 15);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new System.Drawing.Size(765, 26);
-            textBox1.TabIndex = 0;
-            var f = Assembly.GetEntryAssembly().GetFile("README.md");
-            textBox1.Text = "text";
-            // 
-            // button1
-            // 
-            button1.Location = new System.Drawing.Point(113, 378);
-            button1.Name = "button1";
-            button1.Size = new System.Drawing.Size(163, 60);
-            button1.TabIndex = 1;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            button2.Location = new System.Drawing.Point(551, 378);
-            button2.Name = "button2";
-            button2.Size = new System.Drawing.Size(161, 60);
-            button2.TabIndex = 2;
-            button2.Text = "button2";
-            button2.UseVisualStyleBackColor = true;
-            // 
-            // Form1
-            // 
-            HelpForm.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            HelpForm.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            HelpForm.ClientSize = new System.Drawing.Size(800, 576);
-            HelpForm.Controls.Add(button2);
-            HelpForm.Controls.Add(button1);
-            HelpForm.Controls.Add(textBox1);
-            HelpForm.Name = "Form1";
-        }
-
         public static void HandleHotKey()
         {
             //Possible states:
