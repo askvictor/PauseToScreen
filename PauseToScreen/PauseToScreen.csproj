@@ -3,19 +3,21 @@
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net5.0-windows10.0.17763.0</TargetFramework>
-	<UseWindowsForms>true</UseWindowsForms>
+        <UseWindowsForms>true</UseWindowsForms>
 		<UseWPF>true</UseWPF>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.0.2" />
     </ItemGroup>
+    
     <PropertyGroup>
         <ApplicationIcon>PauseToScreen.ico</ApplicationIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
+    
     <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath=""/>
-        <None Include="..\LICENSE.md" Pack="true" PackagePath=""/>
+        <None Include="..\README.md" Pack="true" PackagePath="" />
+        <None Include="..\LICENSE.md" Pack="true" PackagePath="" />
     </ItemGroup>
 </Project>
