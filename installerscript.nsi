@@ -42,4 +42,3 @@ Section "Uninstall"
     # Delete the directory recursive (TODO - probably shouldn't do this)
     RMDir /r /rebootok $INSTDIR
 SectionEnd
-#TODO - ask before install
