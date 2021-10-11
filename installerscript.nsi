@@ -13,10 +13,11 @@ Section
     # define output path
     SetOutPath $INSTDIR
      
-    # specify file to go in output path
-    File /r PauseToScreen\bin\Release\net5.0-windows10.0.17763.0\*
+    # specify files to go in output path
+    File PauseToScreen\bin\publish\*
      
     CreateShortcut "$SMSTARTUP\PauseToScreen.lnk" "$INSTDIR\${EXE_NAME}" 
+    CreateShortcut "$SMPROGRAMS\PauseToScreen.lnk" "$INSTDIR\${EXE_NAME}" 
     
     SetRegView 64
     WriteRegStr HKCU "${UNINST_KEY}" "DisplayName" "PauseToScreen"
