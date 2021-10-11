@@ -14,3 +14,9 @@ You could just use the in-built ‘extend displays’ mode and have your present
 
 ## What platform?
 Windows 10 and 11 only. Sorry Mac users, I don’t have a Mac to develop on. Sorry Linux users, there aren’t enough of you in the teaching workforce. Sorry Chromebook users, there’s no APIs to be able to do something like this in ChromeOS.
+
+## Problems?
+If you have any problems, please raise an [issue in Github](https://github.com/askvictor/PauseToScreen/issues) (account required), or at [my issue tracker](https://docs.google.com/forms/d/e/1FAIpQLSfJzt81GjENdARMeORSi-YV-yX-GoebSz8CVlZbWFcwDQQZGQ/viewform?usp=sf_link). 
+
+## Installation?
+Find the latest installater [here](https://github.com/askvictor/PauseToScreen/releases/latest/download/PauseToScreenInstaller.exe). The installer contains a bundled .NET framework, and does not require any Administrator access, and will install to the user's account. If you would like a slimmer installer without the bundled .NET, or to deploy to the entire system, or other system-wide deployment options, please [raise a support request](https://docs.google.com/forms/d/e/1FAIpQLSfJzt81GjENdARMeORSi-YV-yX-GoebSz8CVlZbWFcwDQQZGQ/viewform?usp=sf_link) and we can discuss terms. 
