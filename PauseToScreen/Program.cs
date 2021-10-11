@@ -38,6 +38,19 @@ namespace PauseToScreen
         [STAThread]
         static void Main()
         {
+            bool mutexCreated = false;
+            Mutex mutex = new Mutex(true, "PauseToScreenRunning", out mutexCreated);
+
+            if (!mutexCreated)
+            {
+                MessageBox.Show(
+                  "PauseToScreen is already running. To use, press Ctrl-Shift-P, or use the orange notification icon.",
+                  "PauseToScreen",
+                  MessageBoxButtons.OK);
+                mutex.Close();
+                return;
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             
@@ -48,12 +61,19 @@ namespace PauseToScreen
             notifyIcon.ContextMenuStrip.Items.Add("Pause/Unpause", null, (s, e) => HandleHotKey());
             notifyIcon.ContextMenuStrip.Items.Add("README", null,
                 (s, e) => Process.Start(new ProcessStartInfo{FileName="https://github.com/askvictor/PauseToScreen/blob/master/README.md", UseShellExecute=true}));
+            notifyIcon.ContextMenuStrip.Items.Add("Report a problem", null,
+                (s, e) => Process.Start(new ProcessStartInfo{FileName="https://docs.google.com/forms/d/e/1FAIpQLSfJzt81GjENdARMeORSi-YV-yX-GoebSz8CVlZbWFcwDQQZGQ/viewform?usp=sf_link", UseShellExecute=true}));
+            notifyIcon.ContextMenuStrip.Items.Add("Donate", null,
+                (s, e) => Process.Start(new ProcessStartInfo{FileName="https://ko-fi.com/F1F5ERBP", UseShellExecute=true}));
+
             notifyIcon.ContextMenuStrip.Items.Add("Exit", null,(s, e) => Application.Exit());
             notifyIcon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             notifyIcon.Text = "Pause To Screen";
             notifyIcon.MouseClick += (s, e) => { if (e.Button == MouseButtons.Left) HandleHotKey(); };
             notifyIcon.Visible = true;
-            Application.Run(new ApplicationContext()); 
+            Application.Run(new ApplicationContext());
+            mutex.Close();
+
         }
         public static void HandleMonitorHotplug()
         {
